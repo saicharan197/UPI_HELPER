@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Shop — QR Pay</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div id="app" class="app-container">
+
+    <!-- top language selector -->
+    <div style="max-width:900px;margin:14px auto 0;padding:0 12px;display:flex;justify-content:flex-end">
+      <select id="langSelect" title="Language" style="padding:8px;border-radius:8px;">
+        <option value="en">English</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="hi">हिन्दी</option>
+        <option value="te">తెలుగు</option>
+      </select>
+    </div>
+
+    <!-- ONBOARDING PAGES -->
+    <section id="pagePhone" class="page active-page">
+      <div class="page-card">
+        <h1 id="hdrPhone">Enter Phone</h1>
+        <p class="muted" id="mutedPhone">Enter shop / owner phone number (10 digits).</p>
+
+        <label id="lblPhone">Phone number</label>
+        <div class="row">
+          <input id="phone" type="tel" maxlength="10" placeholder="9876543210" />
+          <button id="sendOtpBtn" class="cta">Send OTP</button>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="backFromPhone" class="ghost">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="pageOtp" class="page">
+      <div class="page-card">
+        <h1 id="hdrOtp">Verify OTP</h1>
+        <p class="muted" id="mutedOtp">We simulated sending an OTP to the phone. Enter it below.</p>
+
+        <label id="lblOtp">OTP</label>
+        <div class="row">
+          <input id="otp" type="tel" maxlength="6" placeholder="1234" />
+          <button id="verifyOtpBtn" class="cta">Verify</button>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="backFromOtp" class="ghost">← Back</button>
+          <button id="resendOtpBtn" class="ghost">Resend</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="pageBank" class="page">
+      <div class="page-card">
+        <h1 id="hdrBank">Bank &amp; KYC</h1>
+        <p class="muted" id="mutedBank">Select bank, enter UPI and Govt ID (Aadhaar / PAN).</p>
+
+        <label id="lblBank">Select bank</label>
+        <div class="row">
+          <select id="bankSelect">
+            <option value="">--Choose bank--</option>
+            <option>State Bank of India</option>
+            <option>HDFC Bank</option>
+            <option>ICICI Bank</option>
+            <option>Axis Bank</option>
+          </select>
+          <button id="verifyBankBtn" class="ghost">Verify Bank</button>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div style="flex:1">
+            <label id="lblUpi">UPI / Collection ID</label>
+            <input id="upi" placeholder="merchant@bank" />
+          </div>
+          <div style="flex:1">
+            <label id="lblGov">Govt ID (Aadhaar / PAN)</label>
+            <input id="govId" placeholder="123456789012" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:14px">
+          <button id="backFromPost" class="ghost">← Back</button>
+          <button id="finishSetupBtn" class="cta">Finish &amp; Go to Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME: separate full page -->
+    <section id="pageHome" class="page">
+      <div class="page-card">
+        <header class="topbar">
+          <div class="top-left">
+            <h2 id="storeTitle" class="large-title">My Shop</h2>
+            <div id="bankInfo" class="muted small">No bank linked</div>
+          </div>
+          <div class="top-right">
+            <div id="profileBtn" class="avatar" title="Profile"></div>
+          </div>
+        </header>
+
+        <nav class="tabs">
+          <button id="btnOpenHome" class="active" data-view="home">Home</button>
+          <button id="btnOpenHistory" data-view="history">History</button>
+          <button id="btnOpenSettings" data-view="settings">Settings</button>
+        </nav>
+
+        <main class="main-content">
+          <section id="homeView">
+            <div class="grid">
+              <div class="card tile primary">
+                <div class="tile-title">New Payment</div>
+                <div class="tile-body">Generate fixed-amount QR</div>
+                <button class="cta" id="newPaymentBtn">Enter amount</button>
+              </div>
+
+              <div class="card tile green">
+                <div class="tile-title">Log Payment</div>
+                <div class="tile-body">Cash payment / manual log</div>
+                <button class="cta" id="logPaymentBtn">Log Cash</button>
+              </div>
+
+              <div class="card tile" id="recentCard">
+                <div class="tile-title">Recent</div>
+                <div class="tile-body" id="recentBody">No recent transactions</div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </section>
+
+    <!-- HISTORY page with two medium tabs (bank statements, bank balance) -->
+    <section id="pageHistory" class="page">
+      <div class="page-card">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h1 id="hdrHistory">History</h1>
+          <div>
+            <button id="backFromHistory" class="ghost">Back to Home</button>
+          </div>
+        </div>
+
+        <!-- medium tabs inside history -->
+        <div style="display:flex;gap:12px;margin-top:12px;">
+          <button id="btnBankStatements" class="ghost">Bank Statements</button>
+          <button id="btnBankBalance" class="ghost">Bank Balance</button>
+        </div>
+
+        <div id="bankProtectedContent" class="card hidden" style="margin-top:14px;padding:12px;">
+          <!-- filled after PIN verify -->
+        </div>
+
+        <ul id="txList" class="tx-list" style="margin-top:12px"></ul>
+      </div>
+    </section>
+
+    <!-- SETTINGS page -->
+    <section id="pageSettings" class="page">
+      <div class="page-card">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h1 id="hdrSettings">Settings</h1>
+          <button id="backFromSettings" class="ghost">Back to Home</button>
+        </div>
+
+        <label id="lblStore">Store name</label>
+        <input id="storeName" placeholder="Optional" />
+
+        <label id="lblMerchantVpa">Merchant VPA (UPI address)</label>
+        <input id="merchantVpa" placeholder="merchant@bank" />
+
+        <label id="lblLang">Language</label>
+        <select id="langSelect2">
+          <option value="en">English</option>
+          <option value="kn">ಕನ್ನಡ</option>
+          <option value="hi">हिन्दी</option>
+          <option value="te">తెలుగు</option>
+        </select>
+
+        <div style="margin-top:12px" class="row">
+          <button id="exportBtn" class="ghost">Export</button>
+          <button id="clearBtn" class="ghost danger">Clear Data</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPI PIN set & enter modals -->
+    <div id="setUpiPinModal" class="modal hidden">
+      <div class="modal-card card">
+        <h3 id="setUpiPinTitle">Set UPI PIN</h3>
+        <p class="muted" id="setUpiPinMuted">Create a 4-digit UPI PIN to protect bank info.</p>
+        <input id="setUpiPinInput" type="password" maxlength="4" inputmode="numeric" placeholder="••••" />
+        <div style="margin-top:12px" class="row">
+          <button id="setUpiPinBtn" class="cta">Set PIN</button>
+          <button id="skipUpiPinBtn" class="ghost">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="enterUpiPinModal" class="modal hidden">
+      <div class="modal-card card">
+        <h3 id="enterUpiPinTitle">Enter UPI PIN</h3>
+        <p class="muted" id="enterUpiPinMuted">Enter your 4-digit UPI PIN to continue.</p>
+        <input id="enterUpiPinInput" type="password" maxlength="4" inputmode="numeric" placeholder="••••" />
+        <div style="margin-top:12px" class="row">
+          <button id="verifyUpiPinBtn" class="cta">Verify</button>
+          <button id="cancelUpiPinBtn" class="ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="profileModal" class="modal hidden">
+      <div class="modal-card card">
+        <h3 id="hdrProfile">Profile</h3>
+        <div id="profileBody" style="margin-top:8px"></div>
+        <div style="margin-top:12px" class="row">
+          <button id="editProfileBtn" class="cta">Edit</button>
+          <button id="closeProfileBtn" class="ghost">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AMOUNT MODAL & QR -->
+    <div id="modalContainer" class="modal hidden">
+      <div class="modal-card card">
+        <h3 id="modalTitle">Enter amount</h3>
+        <div class="amount-display">₹ <span id="amountText">0</span></div>
+        <div id="pad" class="pad"></div>
+        <div class="row">
+          <button id="confirmAmountBtn" class="cta">Generate QR</button>
+          <button id="cancelAmountBtn" class="ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="qrModal" class="modal hidden">
+      <div class="modal-card card">
+        <h3 id="qrTitle">Show QR to customer</h3>
+        <div id="qrcode" class="qrcode"></div>
+        <label>Simulated payer name</label>
+        <input id="payerName" placeholder="Customer name (optional)" />
+        <div class="row">
+          <button id="simulatePaymentBtn" class="cta">Simulate Payment</button>
+          <button id="closeQrBtn" class="ghost">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TX DETAIL -->
+    <div id="txDetailModal" class="modal hidden">
+      <div class="modal-card card">
+        <h3>Transaction details</h3>
+        <div id="txDetailBody" style="margin-top:8px"></div>
+        <div style="margin-top:12px" class="row">
+          <button id="closeTxDetailBtn" class="cta">Close</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+:root{
+  --bg: linear-gradient(180deg,#fff 0%,#f0f7fb 100%);
+  --card: #ffffff;
+  --muted: #7d8b95;
+  --accent: #0b66d1;
+  --accent-2: #0f9d58;
+  --danger: #e55353;
+  --pad-bg: rgba(255,255,255,0.95);
+  --pad-border: rgba(0,0,0,0.06);
+  --pad-press: rgba(11,102,209,0.08);
+  --shadow: 0 8px 30px rgba(17,24,39,0.06);
+}
+
+html,body{ height:100%; margin:0; font-family: 'Inter', system-ui, -apple-system,"Segoe UI",Roboto,Arial; background:var(--bg); color:#111; }
+.app-container{ max-width:900px; margin:20px auto; padding:0 12px; }
+
+/* page: hidden by default; only .active-page shows */
+.page{ display:none; min-height: 78vh; align-items:center; justify-content:center; padding:18px; }
+.active-page{ display:flex; }
+
+/* central card */
+.page-card{ width:100%; max-width:760px; background:var(--card); padding:28px; border-radius:14px; box-shadow:var(--shadow); }
+.large-title{ margin:0; font-size:28px; font-weight:800; }
+.muted{ color:var(--muted); }
+.small{ font-size:13px; }
+
+/* topbar for home */
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:8px 0 18px; }
+.top-left{ display:flex; flex-direction:column; }
+.top-right{ display:flex; align-items:center; gap:12px; }
+
+/* avatar */
+.avatar{
+  width:56px; height:56px; border-radius:50%;
+  background: linear-gradient(135deg,#f6a5b9,#c0e0ff);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-weight:800; color:#05223c; font-size:18px; box-shadow:0 6px 18px rgba(17,24,39,0.08); cursor:pointer;
+}
+
+/* tabs (top-level nav buttons) */
+.tabs{ display:flex; gap:14px; margin:8px 0 18px; padding:0 4px; }
+.tabs button{ background:linear-gradient(#fafcff,#eef7ff); border-radius:12px; border:1px solid rgba(10,80,160,0.06); padding:10px 16px; cursor:pointer; font-weight:700; color:#0b66d1; }
+.tabs button.active{ background:#eaf5ff; box-shadow:0 6px 18px rgba(11,102,209,0.06); }
+
+/* grid & tiles */
+.grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; align-items:start; padding:0 6px; }
+.tile{ padding:18px; border-radius:12px; background:var(--card); box-shadow:var(--shadow); }
+.tile.primary{ border-left:8px solid #0b66d1; }
+.tile.green{ border-left:8px solid var(--accent-2); }
+.tile-title{ font-weight:800; font-size:18px; margin-bottom:8px; }
+.tile-body{ color:var(--muted); margin-bottom:12px; }
+.cta{ background:linear-gradient(#1473e0,#0b66d1); color:white; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; }
+
+/* modals */
+.modal{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(14,20,30,0.28); z-index:9999; }
+.modal.hidden{ display:none; }
+.modal-card{ width:680px; max-width:95%; padding:20px; border-radius:12px; background:var(--card); box-shadow:var(--shadow); }
+
+/* pad */
+.pad{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:12px; }
+.pad button{ background:var(--pad-bg); border:1px solid var(--pad-border); padding:14px; border-radius:12px; font-weight:800; font-size:18px; color:#111; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.pad button:active{ background:var(--pad-press); transform:translateY(1px); }
+
+/* tx list */
+.tx-list{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.tx-list li{ background:#fff; border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(17,24,39,0.04); cursor:pointer; }
+.tx-amount{ font-weight:800; font-size:16px; }
+.tx-meta{ color:var(--muted); font-size:13px; }
+
+/* small utilities */
+.row{ display:flex; gap:12px; align-items:center; margin-top:8px; }
+input, select{ padding:9px 10px; border-radius:10px; border:1px solid rgba(10,30,50,0.06); font-size:15px; }
+button.ghost{ background:transparent; border:1px solid rgba(10,30,50,0.06); padding:8px 12px; border-radius:10px; cursor:pointer; }
+button.ghost.danger{ border-color: rgba(229,83,83,0.2); color:var(--danger); }
+
+/* responsive */
+@media(max-width:760px){ .grid{ grid-template-columns: 1fr; } .avatar{ width:48px; height:48px; } .page-card{ padding:18px; } }
